@@ -1,4 +1,4 @@
-from lab_04.algorithms_circle import add_symmetric_coors
+from algorithms_circle import add_symmetric_coors
 from math import sqrt, sin, cos
 from tkinter import messagebox as mb
 

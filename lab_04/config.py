@@ -1,0 +1,9 @@
+FONT = 'Times 12'
+FONT_BOLD = FONT + ' bold'
+WIDTH = 5
+
+PADX = 1
+PADY = 1
+
+CANVAS_WIDTH = 900
+CANVAS_HEIGHT = 750

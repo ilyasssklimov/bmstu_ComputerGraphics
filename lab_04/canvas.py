@@ -1,8 +1,9 @@
-from lab_04.algorithms_circle import get_data_circle, canonical_circle, parametric_circle
-from lab_04.algorithms_circle import bresenham_circle, midpoint_circle
-from lab_04.algorithms_ellipse import get_data_ellipse, canonical_ellipse, parametric_ellipse
-from lab_04.algorithms_ellipse import bresenham_ellipse, midpoint_ellipse
-from lab_04.data import colors
+from algorithms_circle import get_data_circle, canonical_circle, parametric_circle
+from algorithms_circle import bresenham_circle, midpoint_circle
+from algorithms_ellipse import get_data_ellipse, canonical_ellipse, parametric_ellipse
+from algorithms_ellipse import bresenham_ellipse, midpoint_ellipse
+from config import *
+from data import colors
 import tkinter as tk
 import tkinter.messagebox as mb
 from pprint import pprint
@@ -11,8 +12,8 @@ from pprint import pprint
 class CanvasCirclesClass(tk.Canvas):
     def __init__(self, frame):
         self.frame = frame
-        self.width = 900
-        self.height = 750
+        self.width = CANVAS_WIDTH
+        self.height = CANVAS_HEIGHT
         super().__init__(self.frame, width=self.width, height=self.height, bg='white', highlightbackground='black')
 
     def delete_all(self):
