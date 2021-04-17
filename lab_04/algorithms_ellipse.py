@@ -3,6 +3,32 @@ from math import sqrt, sin, cos
 from tkinter import messagebox as mb
 
 
+def get_data_spectrum_ellipse(data):
+    data_checked = get_data_ellipse(data[:-2])
+    if not data_checked:
+        return None
+    try:
+        n = int(data[-2])
+        if n <= 0:
+            raise ValueError
+        if data_checked[2] >= data_checked[3]:
+            raise ArithmeticError
+    except ValueError:
+        mb.showerror('Ошибка', 'Количество шагов должно быть положительным целым числом')
+        return None
+    except ArithmeticError:
+        mb.showerror('Ошибка', 'Начальное значение полуоси должно быть меньше конечного')
+        return None
+
+    try:
+        t = float(data[-1])
+    except ValueError:
+        mb.showerror('Ошибка', 'Неизменяемая полуось эллипса должна быть числом')
+        return None
+
+    return *data_checked, t, n
+
+
 def get_data_ellipse(data):
     try:
         x = float(data[0])

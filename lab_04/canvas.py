@@ -1,7 +1,7 @@
 from algorithms_circle import get_data_circle, canonical_circle, parametric_circle
-from algorithms_circle import bresenham_circle, midpoint_circle
+from algorithms_circle import bresenham_circle, midpoint_circle, get_data_spectrum_circle
 from algorithms_ellipse import get_data_ellipse, canonical_ellipse, parametric_ellipse
-from algorithms_ellipse import bresenham_ellipse, midpoint_ellipse
+from algorithms_ellipse import bresenham_ellipse, midpoint_ellipse, get_data_spectrum_ellipse
 from config import *
 from data import colors
 import tkinter as tk
@@ -76,36 +76,31 @@ class CanvasCirclesClass(tk.Canvas):
 
         self.draw_by_algo(values, algorithm, color)
 
-    def draw_spectrum_circle(self, data, r2, n, algorithm, color):
-        data_checked = get_data_circle(data)
+    def draw_spectrum_circle(self, data, algorithm, color):
+        data_checked = get_data_spectrum_circle(data)
         if not data_checked:
             return None
-        try:
-            n = int(n)
-            if n <= 0:
-                raise ValueError
-        except ValueError:
-            mb.showerror('Ошибка', 'Количество шагов должно быть положительным целым числом')
-            return None
 
-        try:
-            r2 = float(r2)
-            if r2 <= 0:
-                raise ValueError
-            if data_checked[2] >= r2:
-                raise ArithmeticError
-        except ValueError:
-            mb.showerror('Ошибка', 'Радиус окружности должен быть неотрицательным числом')
-        except ArithmeticError:
-            mb.showerror('Ошибка', 'Начальный радиус должен быть меньше конечного')
         x, y, r1 = data_checked[0], data_checked[1], data_checked[2]
-        step = (r2 - r1) / n
+        r2, n = data_checked[3], data_checked[4]
+        step = (r2 - r1) / (n - 1)
         for i in range(n):
-            r1 += step
             self.draw_circle([x, y, r1], algorithm, color)
+            r1 += step
 
-    def draw_spectrum_ellipse(self, data, algorithm, color):
-        data_checked = get_data_ellipse(data)
+    def draw_spectrum_ellipse(self, data, choice, algorithm, color):
+        data_checked = get_data_spectrum_ellipse(data)
         if not data_checked:
             return None
-        x, y, a, b = data_checked[0], data_checked[1], data_checked[2], data_checked[3]
+
+        x, y, t1, t2 = data_checked[0], data_checked[1], data_checked[2], data_checked[3]
+        t, n = data_checked[4], data_checked[5]
+
+        step = (t2 - t1) / (n - 1)
+        for i in range(n):
+            if choice == 0:
+                self.draw_ellipse([x, y, t1, t], algorithm, color)
+            else:
+                self.draw_ellipse([x, y, t, t1], algorithm, color)
+
+            t1 += step

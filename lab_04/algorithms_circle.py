@@ -8,6 +8,34 @@ def int_n(num):
     return num
 
 
+def get_data_spectrum_circle(data):
+    data_checked = get_data_circle(data[:-2])
+    if not data_checked:
+        return None
+    try:
+        n = int(data[-1])
+        if n <= 0:
+            raise ValueError
+    except ValueError:
+        mb.showerror('Ошибка', 'Количество шагов должно быть положительным целым числом')
+        return None
+
+    try:
+        r2 = float(data[-2])
+        if r2 <= 0:
+            raise ValueError
+        if data_checked[2] >= r2:
+            raise ArithmeticError
+    except ValueError:
+        mb.showerror('Ошибка', 'Радиус окружности должен быть неотрицательным числом')
+        return None
+    except ArithmeticError:
+        mb.showerror('Ошибка', 'Начальный радиус должен быть меньше конечного')
+        return None
+
+    return *data_checked, r2, n
+
+
 def get_data_circle(data):
     try:
         x = float(data[0])
