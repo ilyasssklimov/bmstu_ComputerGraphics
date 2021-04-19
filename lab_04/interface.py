@@ -1,6 +1,8 @@
+from algorithms_circle import *
 from canvas import CanvasCirclesClass
 from config import *
 from data import algorithms, colors
+from efficiency import compare_time_circle
 import tkinter as tk
 from tkinter import ttk
 
@@ -173,6 +175,31 @@ class SpectrumFrame(tk.Frame):
         self.grid(row=3, column=column_figure + 1, padx=5, pady=5, sticky=tk.N)
 
 
+class EfficiencyFrame(tk.Frame):
+    def __init__(self, root, figure):
+        super().__init__(root)
+
+        self.root = root
+        self.figure = figure
+
+        self.add_efficiency()
+
+    def add_efficiency(self):
+        if self.figure == 'circle':
+            column_figure = 0
+            text = 'Эффективность построения\nокружностей по времени\n(поля ввода те же, что и для спектра)'
+            create_button(self, 'Вывести график', FONT, 1, column_figure, PADX, PADY, 1, 'wen',
+                          lambda: self.root.efficiency(self.figure))
+        else:
+            column_figure = 2
+            text = 'Эффективность построения\nэллипсов по времени\n(поля ввода те же, что и для спектра)'
+            create_button(self, 'Вывести график', FONT, 1, column_figure, PADX, PADY, 1, 'wen')
+
+        create_label(self, text, FONT_BOLD, 0, column_figure, PADX, PADY, tk.N, 'groove')
+
+        self.grid(row=5, column=column_figure + 1, padx=5, pady=5, sticky=tk.N)
+
+
 class MainWindowClass(tk.Frame):
     def __init__(self, root):
         super().__init__(root)
@@ -191,19 +218,21 @@ class MainWindowClass(tk.Frame):
 
         self.frame_spectrum_circle = SpectrumFrame(self, 'circle')
         self.frame_spectrum_ellipse = SpectrumFrame(self, 'ellipse')
-
         self.spectrum_data = []
+
+        self.frame_efficiency_circle = EfficiencyFrame(self, 'circle')
+        self.frame_efficiency_ellipse = EfficiencyFrame(self, 'ellipse')
 
         self.frame_general = tk.Frame(self)
         self.add_general()
 
     def add_separators(self):
-        ttk.Separator(self, orient='vertical').grid(row=0, column=2, rowspan=5, padx=5, sticky='ns')
+        ttk.Separator(self, orient='vertical').grid(row=0, column=2, rowspan=6, padx=5, sticky='ns')
         ttk.Separator(self, orient='horizontal').grid(row=2, column=1, columnspan=3, pady=5, sticky='we')
         ttk.Separator(self, orient='horizontal').grid(row=4, column=1, columnspan=3, pady=5, sticky='we')
 
     def add_canvas(self):
-        self.canvas.grid(row=0, column=0, rowspan=6, padx=5, pady=5)
+        self.canvas.grid(row=0, column=0, rowspan=7, padx=5, pady=5)
 
     def create_figure(self, figure):
         if figure == 'circle':
@@ -228,7 +257,7 @@ class MainWindowClass(tk.Frame):
     def add_general(self):
         create_button(self.frame_general, 'Очистить холст', FONT, 0, 0, 0, 0, 1, 'we', self.canvas.delete_all)
 
-        self.frame_general.grid(row=5, column=1, padx=5, columnspan=3, pady=5, sticky=tk.N)
+        self.frame_general.grid(row=6, column=1, padx=5, columnspan=3, pady=5, sticky=tk.N)
 
     def create_spectrum(self, figure):
         if figure == 'circle':
@@ -263,3 +292,31 @@ class MainWindowClass(tk.Frame):
                                                   self.frame_spectrum_ellipse.choice_axis.get(),
                                                   self.frame_choice_ellipse.algorithm.get(),
                                                   self.frame_choice_ellipse.color.get())
+
+    def efficiency(self, figure):
+        if figure == 'circle':
+            efficiency_data = self.frame_spectrum_circle.data
+        else:
+            efficiency_data = self.frame_spectrum_ellipse.data
+
+        x = efficiency_data[0].get()
+        y = efficiency_data[1].get()
+        n = efficiency_data[2].get()
+
+        if figure == 'circle':
+            r1 = efficiency_data[3].get()
+            r2 = efficiency_data[4].get()
+            funcs = [canonical_circle, parametric_circle, bresenham_circle, midpoint_circle]
+            compare_time_circle(funcs, [x, y, r1, r2, n])
+        elif figure == 'ellipse':
+            if self.frame_spectrum_ellipse.choice_axis.get() == 0:
+                a1 = efficiency_data[3].get()
+                a2 = efficiency_data[4].get()
+                b = efficiency_data[5].get()
+            else:
+                b1 = efficiency_data[6].get()
+                b2 = efficiency_data[7].get()
+                a = efficiency_data[8].get()
+
+
+

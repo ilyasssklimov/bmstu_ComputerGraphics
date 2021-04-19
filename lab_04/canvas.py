@@ -84,7 +84,7 @@ class CanvasCirclesClass(tk.Canvas):
         x, y, r1 = data_checked[0], data_checked[1], data_checked[2]
         r2, n = data_checked[3], data_checked[4]
         step = (r2 - r1) / (n - 1)
-        for i in range(n):
+        for _ in range(n):
             self.draw_circle([x, y, r1], algorithm, color)
             r1 += step
 

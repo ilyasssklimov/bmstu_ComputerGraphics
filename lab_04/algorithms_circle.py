@@ -81,28 +81,12 @@ def canonical_circle(x0, y0, r):
     return values
 
 
-'''
-        public static void DrawCircle(Bitmap b, Point center, int radius, Color color)
-        {
-            int x = 0, y;
-            int rr = radius * radius;
-            double halfR = radius / Math.Sqrt(2); 
-
-            for (x = 0; x <= halfR; x++)
-            {
-                y = Convert.ToInt32(Math.Sqrt(rr - x * x));
-
-                DrawHack.DrawSymmetric(b, center, x, y, color);
-                DrawHack.DrawSymmetric(b, center, y, x, color);
-            }
-        }
-'''
-
-
 def parametric_circle(x0, y0, r):
     values = []
-    for t in np.arange(0, 2 * pi, 1 / r):
+    if r == 0:
+        return [x0, y0]
 
+    for t in np.arange(0, 2 * pi, 1 / r):
         values.extend([get_x_param_circle(x0, r, t), get_y_param_circle(y0, r, t)])
     return values
 
