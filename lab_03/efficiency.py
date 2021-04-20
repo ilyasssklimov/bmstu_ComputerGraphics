@@ -28,17 +28,6 @@ def get_coordinates(coordinates):
     return x1, y1, x2, y2
 
 
-def get_intensity(canvas, color, cur):
-    r1, g1, b1 = canvas.winfo_rgb(color)
-    r2, g2, b2 = canvas.winfo_rgb('white')
-    new_r = int(r1 + ((r2 - r1) * (1 - cur)))
-    new_g = int(g1 + ((g2 - g1) * (1 - cur)))
-    new_b = int(b1 + ((b2 - b1) * (1 - cur)))
-
-    new_color = "#%4.4x%4.4x%4.4x" % (new_r, new_g, new_b)
-    return new_color
-
-
 def dda_steps(coors):
     steps = 0
     x1, y1, x2, y2 = coors[0], coors[1], coors[2], coors[3]
@@ -308,7 +297,7 @@ def compare_time(algorithms, length, coeffs):
         values.append(total / (max_angle / angle * iters) * coeffs[index])
 
     plt.bar(names, values, align='center')
-    plt.ylabel("Время")
+    plt.ylabel('Время')
 
     plt.show()
 
