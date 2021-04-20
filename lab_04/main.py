@@ -1,4 +1,4 @@
-from interface import MainWindowClass
+from lab_04.interface import MainWindowClass
 import tkinter as tk
 
 

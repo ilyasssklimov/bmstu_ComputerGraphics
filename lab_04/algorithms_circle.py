@@ -27,46 +27,36 @@ def get_data_spectrum_circle(data):
         if data_checked[2] >= r2:
             raise ArithmeticError
     except ValueError:
-        mb.showerror('Ошибка', 'Радиус окружности должен быть неотрицательным числом')
+        mb.showerror('Ошибка', 'Радиус окружности должен быть положительным числом')
         return None
     except ArithmeticError:
         mb.showerror('Ошибка', 'Начальный радиус должен быть меньше конечного')
         return None
 
-    return *data_checked, r2, n
+    data_checked += (r2, n)
+    return data_checked
 
 
 def get_data_circle(data):
     try:
         x = float(data[0])
     except ValueError:
-        return not mb.showerror('Ошибка', 'Координата X центра окружности должна быть числом')
+        mb.showerror('Ошибка', 'Координата X центра окружности должна быть числом')
+        return None
     try:
         y = float(data[1])
     except ValueError:
-        return not mb.showerror('Ошибка', 'Координата Y центра окружности должна быть числом')
+        mb.showerror('Ошибка', 'Координата Y центра окружности должна быть числом')
+        return None
     try:
         r = float(data[2])
-        if r < 0:
+        if r <= 0:
             raise ValueError
     except ValueError:
-        return not mb.showerror('Ошибка', 'Радиус окружности должен быть неотрицательным числом')
+        mb.showerror('Ошибка', 'Радиус окружности должен быть положительным числом')
+        return None
 
     return x, y, r
-
-
-def get_y_canon_circle(x0, y0, x, r):
-    tmp = sqrt(r ** 2 - (x - x0) ** 2)
-    return [int_n(-x + x0 * 2), int_n(-tmp + y0)], [int_n(x), int_n(-tmp + y0)],\
-           [int_n(x), int_n(tmp + y0)], [int_n(-x + x0 * 2), int_n(tmp + y0)]
-
-
-def get_x_param_circle(x0, r, t):
-    return int_n(x0 + r * cos(t))
-
-
-def get_y_param_circle(y0, r, t):
-    return int_n(y0 + r * sin(t))
 
 
 def canonical_circle(x0, y0, r):
@@ -83,11 +73,14 @@ def canonical_circle(x0, y0, r):
 
 def parametric_circle(x0, y0, r):
     values = []
-    if r == 0:
-        return [x0, y0]
 
-    for t in np.arange(0, 2 * pi, 1 / r):
-        values.extend([get_x_param_circle(x0, r, t), get_y_param_circle(y0, r, t)])
+    step = 1 / r
+    for t in np.arange(0, pi / 4 + step, step):
+        x = int_n(r * cos(t))
+        y = int_n(r * sin(t))
+        values.extend(add_symmetric_coors(x0, y0, x, y))
+        values.extend(add_symmetric_coors(x0, y0, y, x))
+
     return values
 
 
@@ -117,7 +110,7 @@ def add_symmetric_coors(x0, y0, x, y):
 def bresenham_circle(x0, y0, r):
     x, y = 0, r
     d = 2 * (1 - r)  # первоначальная ошибка
-    yk = 0
+    yk = r / sqrt(2)
     values = [x, y]
 
     while y >= yk:

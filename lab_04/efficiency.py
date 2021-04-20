@@ -1,6 +1,6 @@
-from algorithms_circle import get_data_spectrum_circle
-from algorithms_ellipse import get_data_spectrum_ellipse
-from data import algorithms
+from lab_04.algorithms_circle import get_data_spectrum_circle
+from lab_04.algorithms_ellipse import get_data_spectrum_ellipse
+from lab_04.data import algorithms
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ import pandas as pd
 from pprint import pprint
 
 
-def compare_time_circle(algorithm_funcs, data):
+def compare_time_circle(canvas, algorithm_funcs, data):
     data_checked = get_data_spectrum_circle(data)
     if not data_checked:
         return None
@@ -32,37 +32,53 @@ def compare_time_circle(algorithm_funcs, data):
     for index, func in enumerate(algorithm_funcs):
         r_cur = r1
         cur_values = []
-        for i in range(n):
-            total = 0
-            for _ in range(iters):
-                start = time.time_ns()
-                func(x, y, r_cur)
-                finish = time.time_ns() - start
-                total += finish
+        if index != 4:
+            for i in range(n):
+                total = 0
+                for _ in range(iters):
+                    start = time.time()
+                    func(x, y, r_cur)
+                    finish = time.time() - start
+                    total += finish
 
-            cur_values.append(total / iters)
-            r_cur += step
-        values.append(cur_values)
+                cur_values.append(total / iters)
+                r_cur += step
+            values.append(cur_values)
+        else:
+            for i in range(n):
+                total = 0
+                for _ in range(iters):
+                    start = time.time()
+                    func([x - r_cur, y - r_cur, x + r_cur, y + r_cur])
+                    finish = time.time() - start
+                    total += finish
+
+                cur_values.append(total / iters)
+                r_cur += step
+            values.append(cur_values)
+            canvas.delete_all()
 
     data = dict()
-    for i in range(4):
+    for i in range(5):
         data[algorithms[i]] = values[i]
     df = pd.DataFrame(data)
     radius = np.arange(r1, r2 + 1, step)
 
     plt.plot(radius, df)
     plt.legend(data, loc=2)
+    plt.xlabel('Радиус')
+    plt.ylabel('Время')
     plt.show()
 
 
-def compare_time_ellipse(algorithm_funcs, data, choice):
+def compare_time_ellipse(canvas, algorithm_funcs, data, choice):
     data_checked = get_data_spectrum_ellipse(data)
     if not data_checked:
         return None
 
     matplotlib.use('TkAgg')
     plt.figure(2)
-    plt.get_current_fig_manager().set_window_title('Зависимость времени построения эллипса от радиуса')
+    plt.get_current_fig_manager().set_window_title('Зависимость времени построения эллипса от полуоси')
     plt.get_current_fig_manager().toolbar.pack_forget()
     plt.get_current_fig_manager().resize(700, 700)
 
@@ -76,33 +92,56 @@ def compare_time_ellipse(algorithm_funcs, data, choice):
     for index, func in enumerate(algorithm_funcs):
         t_cur = t1
         cur_values = []
-        for i in range(n):
-            total = 0
-            for _ in range(iters):
-                start = time.time_ns()
-                func(x, y, t_cur)
-                finish = time.time_ns() - start
-                total += finish
-
-            cur_values.append(total / iters)
-            t_cur += step
-        values.append(cur_values)
+        if index != 4:
+            for i in range(n):
+                total = 0
+                for _ in range(iters):
+                    if choice == 0:
+                        start = time.time()
+                        func(x, y, t_cur, t)
+                        finish = time.time() - start
+                        total += finish
+                    else:
+                        start = time.time()
+                        func(x, y, t, t_cur)
+                        finish = time.time() - start
+                        total += finish
+                cur_values.append(total / iters)
+                t_cur += step
+            values.append(cur_values)
+        else:
+            for i in range(n):
+                total = 0
+                for _ in range(iters):
+                    if choice == 0:
+                        start = time.time()
+                        func(x - abs(t1), y + abs(t), x + abs(t2), y - abs(t))
+                        finish = time.time() - start
+                        total += finish
+                    else:
+                        start = time.time()
+                        func(x - abs(t), y + abs(t1), x + abs(t), y - abs(t2))
+                        finish = time.time() - start
+                        total += finish
+                cur_values.append(total / iters)
+                t_cur += step
+            values.append(cur_values)
+            canvas.delete_all()
 
     data = dict()
-    for i in range(4):
+    for i in range(5):
         data[algorithms[i]] = values[i]
+
     df = pd.DataFrame(data)
-    radius = np.arange(t1, t2 + 1, step)
+    axis = np.arange(t1, t2 + 1, step)
 
-    plt.plot(radius, df)
+    plt.plot(axis, df)
     plt.legend(data, loc=2)
+
+    if choice == 0:
+        plt.xlabel('Полуось a')
+    else:
+        plt.xlabel('Полуось b')
+
+    plt.ylabel('Время')
     plt.show()
-
-
-    for i in range(n):
-        if choice == 0:
-            self.draw_ellipse([x, y, t1, t], algorithm, color)
-        else:
-            self.draw_ellipse([x, y, t, t1], algorithm, color)
-
-        t1 += step

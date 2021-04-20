@@ -1,8 +1,9 @@
-from algorithms_circle import *
-from canvas import CanvasCirclesClass
-from config import *
-from data import algorithms, colors
-from efficiency import compare_time_circle
+from lab_04.algorithms_circle import *
+from lab_04.algorithms_ellipse import *
+from lab_04.canvas import CanvasCirclesClass
+from lab_04.config import *
+from lab_04.data import algorithms, colors
+from lab_04.efficiency import compare_time_circle, compare_time_ellipse
 import tkinter as tk
 from tkinter import ttk
 
@@ -17,29 +18,23 @@ class FrameInput(tk.Frame):
         self.add_input()
 
     def add_input(self):
+        create_label(self, 'X: ', FONT, 1, 0, 0, 0, tk.N)
+        entry_x = create_entry(self, FONT, 1, 1, 1, 0, tk.N, WIDTH)
+
+        create_label(self, 'Y: ', FONT, 1, 2, 0, 0, tk.N)
+        entry_y = create_entry(self, FONT, 1, 3, 1, 0, tk.N, WIDTH)
+
         if self.figure == 'circle':
             create_label(self, 'Окружность: центр и радиус', FONT_BOLD, 0, 0, PADX, PADY, tk.N, 'groove', 6)
-
-            create_label(self, 'X: ', FONT, 1, 0, 0, 0, tk.N)
-            entry_circle_x = create_entry(self, FONT, 1, 1, 1, 0, tk.N, WIDTH)
-
-            create_label(self, 'Y: ', FONT, 1, 2, 0, 0, tk.N)
-            entry_circle_y = create_entry(self, FONT, 1, 3, 1, 0, tk.N, WIDTH)
 
             create_label(self, 'R: ', FONT, 1, 4, 0, 0, tk.N)
             entry_circle_r = create_entry(self, FONT, 1, 5, 0, 0, tk.N, WIDTH)
 
-            self.data = [entry_circle_x, entry_circle_y, entry_circle_r]
+            self.data = [entry_x, entry_y, entry_circle_r]
             self.grid(row=0, column=1, padx=5, pady=5, sticky=tk.N)
 
         elif self.figure == 'ellipse':
             create_label(self, 'Эллипс: центр и полуоси', FONT_BOLD, 0, 0, PADX, PADY, tk.N, 'groove', 8)
-
-            create_label(self, 'X: ', FONT, 1, 0, 0, 0, tk.N)
-            entry_ellipse_x = create_entry(self, FONT, 1, 1, 1, 0, tk.N, WIDTH)
-
-            create_label(self, 'Y: ', FONT, 1, 2, 0, 0, tk.N)
-            entry_ellipse_y = create_entry(self, FONT, 1, 3, 1, 0, tk.N, WIDTH)
 
             create_label(self, 'a: ', FONT, 1, 4, 0, 0, tk.N)
             entry_ellipse_a = create_entry(self, FONT, 1, 5, 1, 0, tk.N, WIDTH)
@@ -47,7 +42,7 @@ class FrameInput(tk.Frame):
             create_label(self, 'b: ', FONT, 1, 6, 0, 0, tk.N)
             entry_ellipse_b = create_entry(self, FONT, 1, 7, 1, 0, tk.N, WIDTH)
 
-            self.data = [entry_ellipse_x, entry_ellipse_y, entry_ellipse_a, entry_ellipse_b]
+            self.data = [entry_x, entry_y, entry_ellipse_a, entry_ellipse_b]
             self.grid(row=0, column=3, padx=5, pady=5, sticky=tk.N)
 
 
@@ -188,13 +183,12 @@ class EfficiencyFrame(tk.Frame):
         if self.figure == 'circle':
             column_figure = 0
             text = 'Эффективность построения\nокружностей по времени\n(поля ввода те же, что и для спектра)'
-            create_button(self, 'Вывести график', FONT, 1, column_figure, PADX, PADY, 1, 'wen',
-                          lambda: self.root.efficiency(self.figure))
         else:
             column_figure = 2
             text = 'Эффективность построения\nэллипсов по времени\n(поля ввода те же, что и для спектра)'
-            create_button(self, 'Вывести график', FONT, 1, column_figure, PADX, PADY, 1, 'wen')
 
+        create_button(self, 'Вывести график', FONT, 1, column_figure, PADX, PADY, 1, 'wen',
+                      lambda: self.root.efficiency(self.figure))
         create_label(self, text, FONT_BOLD, 0, column_figure, PADX, PADY, tk.N, 'groove')
 
         self.grid(row=5, column=column_figure + 1, padx=5, pady=5, sticky=tk.N)
@@ -230,9 +224,10 @@ class MainWindowClass(tk.Frame):
         ttk.Separator(self, orient='vertical').grid(row=0, column=2, rowspan=6, padx=5, sticky='ns')
         ttk.Separator(self, orient='horizontal').grid(row=2, column=1, columnspan=3, pady=5, sticky='we')
         ttk.Separator(self, orient='horizontal').grid(row=4, column=1, columnspan=3, pady=5, sticky='we')
+        ttk.Separator(self, orient='horizontal').grid(row=6, column=1, columnspan=3, pady=5, sticky='we')
 
     def add_canvas(self):
-        self.canvas.grid(row=0, column=0, rowspan=7, padx=5, pady=5)
+        self.canvas.grid(row=0, column=0, rowspan=8, padx=5, pady=5)
 
     def create_figure(self, figure):
         if figure == 'circle':
@@ -257,7 +252,7 @@ class MainWindowClass(tk.Frame):
     def add_general(self):
         create_button(self.frame_general, 'Очистить холст', FONT, 0, 0, 0, 0, 1, 'we', self.canvas.delete_all)
 
-        self.frame_general.grid(row=6, column=1, padx=5, columnspan=3, pady=5, sticky=tk.N)
+        self.frame_general.grid(row=7, column=1, padx=5, columnspan=3, pady=5, sticky=tk.N)
 
     def create_spectrum(self, figure):
         if figure == 'circle':
@@ -306,17 +301,21 @@ class MainWindowClass(tk.Frame):
         if figure == 'circle':
             r1 = efficiency_data[3].get()
             r2 = efficiency_data[4].get()
-            funcs = [canonical_circle, parametric_circle, bresenham_circle, midpoint_circle]
-            compare_time_circle(funcs, [x, y, r1, r2, n])
+            func = [canonical_circle, parametric_circle, bresenham_circle, midpoint_circle, self.canvas.create_oval]
+            compare_time_circle(self.canvas, func, [x, y, r1, r2, n])
         elif figure == 'ellipse':
+            func = [canonical_ellipse, parametric_ellipse, bresenham_ellipse, midpoint_ellipse, self.canvas.create_oval]
+            choice = self.frame_spectrum_ellipse.choice_axis.get()
             if self.frame_spectrum_ellipse.choice_axis.get() == 0:
                 a1 = efficiency_data[3].get()
                 a2 = efficiency_data[4].get()
                 b = efficiency_data[5].get()
+                compare_time_ellipse(self.canvas, func, [x, y, a1, a2, n, b], choice)
             else:
                 b1 = efficiency_data[6].get()
                 b2 = efficiency_data[7].get()
                 a = efficiency_data[8].get()
+                compare_time_ellipse(self.canvas, func, [x, y, b1, b2, n, a], choice)
 
 
 
