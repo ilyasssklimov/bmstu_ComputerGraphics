@@ -1,1 +1,2 @@
-# BMSTU_ComputerGraphics
+## BMSTU_ComputerGraphics
+4й семестр - лабораторные работы по компьютерной графике
