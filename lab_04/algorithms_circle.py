@@ -63,7 +63,7 @@ def canonical_circle(x0, y0, r):
     values = []
     limit = int_n(r / sqrt(2))
 
-    for x in range(limit + 1):
+    for x in range(limit):
         y = int_n(sqrt(r ** 2 - x ** 2))
         values.extend(add_symmetric_coors(x0, y0, x, y))
         values.extend(add_symmetric_coors(x0, y0, y, x))

@@ -1,9 +1,9 @@
-from lab_04.algorithms_circle import get_data_circle, canonical_circle, parametric_circle
-from lab_04.algorithms_circle import bresenham_circle, midpoint_circle, get_data_spectrum_circle
-from lab_04.algorithms_ellipse import get_data_ellipse, canonical_ellipse, parametric_ellipse
-from lab_04.algorithms_ellipse import bresenham_ellipse, midpoint_ellipse, get_data_spectrum_ellipse
-from lab_04.config import *
-from lab_04.data import colors
+from algorithms_circle import get_data_circle, canonical_circle, parametric_circle
+from algorithms_circle import bresenham_circle, midpoint_circle, get_data_spectrum_circle
+from algorithms_ellipse import get_data_ellipse, canonical_ellipse, parametric_ellipse
+from algorithms_ellipse import bresenham_ellipse, midpoint_ellipse, get_data_spectrum_ellipse
+from config import *
+from data import colors
 import tkinter as tk
 import tkinter.messagebox as mb
 from pprint import pprint

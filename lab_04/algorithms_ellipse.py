@@ -1,4 +1,4 @@
-from lab_04.algorithms_circle import add_symmetric_coors
+from algorithms_circle import add_symmetric_coors
 from math import sqrt, sin, cos
 from tkinter import messagebox as mb
 
@@ -77,7 +77,7 @@ def canonical_ellipse(x0, y0, a, b):
     limit = int_n(bq / s)
     m = 1 / m
 
-    for y in range(limit + 1):
+    for y in range(limit):
         # i += 1
         x = int_n(sqrt(bq - y ** 2) * m)
         values.extend(add_symmetric_coors(x0, y0, x, y))
@@ -92,7 +92,7 @@ def parametric_ellipse(x0, y0, a, b):
     yk = int_n(b ** 2 / sqrt(a ** 2 + b ** 2))  # точка перегиба
     step = 1 / b
     # i = 0
-    while y <= yk:
+    while y < yk:
         # i += 1
         x = int_n(a * cos(angle))
         y = int_n(b * sin(angle))

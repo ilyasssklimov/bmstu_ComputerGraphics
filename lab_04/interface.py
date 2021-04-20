@@ -1,9 +1,9 @@
-from lab_04.algorithms_circle import *
-from lab_04.algorithms_ellipse import *
-from lab_04.canvas import CanvasCirclesClass
-from lab_04.config import *
-from lab_04.data import algorithms, colors
-from lab_04.efficiency import compare_time_circle, compare_time_ellipse
+from algorithms_circle import *
+from algorithms_ellipse import *
+from canvas import CanvasCirclesClass
+from config import *
+from data import algorithms, colors
+from efficiency import compare_time_circle, compare_time_ellipse
 import tkinter as tk
 from tkinter import ttk
 

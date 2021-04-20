@@ -1,6 +1,6 @@
-from lab_04.algorithms_circle import get_data_spectrum_circle
-from lab_04.algorithms_ellipse import get_data_spectrum_ellipse
-from lab_04.data import algorithms
+from algorithms_circle import get_data_spectrum_circle
+from algorithms_ellipse import get_data_spectrum_ellipse
+from data import algorithms
 
 import matplotlib
 import matplotlib.pyplot as plt
