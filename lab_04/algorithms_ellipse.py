@@ -62,54 +62,53 @@ def int_n(num):
     return num
 
 
-def canonical_ellipse(x0, y0, a, b):
+def canonical_ellipse(x0, y0, a, b, draw=True):
     values = []
+    a, b = int_n(a), int_n(b)
     aq, bq = a ** 2, b ** 2
     s = sqrt(aq + bq)
     limit = int_n(aq / s)
     m = b / a
-    # i = 0
-    for x in range(limit):
-        # i += 1
+
+    for x in range(limit + 1):
         y = int_n(sqrt(aq - x ** 2) * m)
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
 
     limit = int_n(bq / s)
     m = 1 / m
 
-    for y in range(limit):
-        # i += 1
+    for y in range(limit + 1):
         x = int_n(sqrt(bq - y ** 2) * m)
-        values.extend(add_symmetric_coors(x0, y0, x, y))
-    # print(f'canon {i}, {len(values)}')
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
+
     return values
 
 
-def parametric_ellipse(x0, y0, a, b):
+def parametric_ellipse(x0, y0, a, b, draw=True):
     values = []
     angle = 0
     x, y = a, 0
-    yk = int_n(b ** 2 / sqrt(a ** 2 + b ** 2))  # точка перегиба
+    yk = int_n(b ** 2 / sqrt(a ** 2 + b ** 2))
     step = 1 / b
-    # i = 0
+
     while y < yk:
-        # i += 1
         x = int_n(a * cos(angle))
         y = int_n(b * sin(angle))
-
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
         angle += step
 
     step = 1 / a
     while x > 0:
-        # i += 1
         x = int_n(a * cos(angle))
         y = int_n(b * sin(angle))
 
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
         angle += step
 
-    # print(f'param {i}, {len(values)}')
     return values
 
 
@@ -132,19 +131,20 @@ def vertical_step(y, d, aq):
     return y, d
 
 
-def bresenham_ellipse(x0, y0, a, b):
+def bresenham_ellipse(x0, y0, a, b, draw=True):
     values = []
+    # a, b = int_n(a), int_n(b)
     x, y, = 0, b
     aq, bq = a ** 2, b ** 2
-    d = aq + bq - 2 * aq * y
+    aq2, bq2 = aq + aq, bq + bq
+    d = aq + bq - aq2 * y
 
-    # i = 0
     while y >= 0:
-        # i += 1
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
 
         if d < 0:
-            d1 = 2 * d + 2 * aq * y - aq
+            d1 = 2 * d + aq2 * y - aq
             if d1 > 0:
                 x, y, d = diagonal_step(x, y, d, aq, bq)
             else:
@@ -152,45 +152,49 @@ def bresenham_ellipse(x0, y0, a, b):
         elif d == 0:
             x, y, d = diagonal_step(x, y, d, aq, bq)
         else:
-            d2 = 2 * d - 2 * bq * x - bq
+            d2 = 2 * d - bq2 * x - bq
             if d2 < 0:
                 x, y, d = diagonal_step(x, y, d, aq, bq)
             else:
                 y, d = vertical_step(y, d, aq)
-    # print(f'bres {i}, {len(values)}')
+
     return values
 
 
-def midpoint_ellipse(x0, y0, a, b):
+def midpoint_ellipse(x0, y0, a, b, draw=True):
     values = []
     aq, bq = a ** 2, b ** 2
+    aq2, bq2 = aq + aq, bq + bq
+
     limit = int_n(aq / sqrt(aq + bq))
     x, y = 0, b
     df = 0
     f = bq - aq * y + 0.25 * aq + 0.5
-    delta = -2 * a ** 2 * y
+    delta = -2 * aq * y
 
     for x in range(limit + 1):
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
         if f >= 0:
             y -= 1
-            delta += 2 * aq
+            delta += aq2
             f += delta
-        df += 2 * bq
+        df += bq2
         f += df + bq
 
-    delta = 2 * bq * x
+    delta = bq2 * x
     f += -bq * (x + 0.75) - aq * (y - 0.75)
-    df = -2 * aq * y
+    df = -aq2 * y
 
     while y >= 0:
-        values.extend(add_symmetric_coors(x0, y0, x, y))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
         if f < 0:
             x += 1
-            delta += 2 * bq
+            delta += bq2
             f += delta
 
-        df += 2 * aq
+        df += aq2
         f += df + aq
         y -= 1
 

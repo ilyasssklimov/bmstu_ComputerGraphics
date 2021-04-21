@@ -59,27 +59,29 @@ def get_data_circle(data):
     return x, y, r
 
 
-def canonical_circle(x0, y0, r):
+def canonical_circle(x0, y0, r, draw=True):
     values = []
     limit = int_n(r / sqrt(2))
 
-    for x in range(limit):
+    for x in range(limit + 1):
         y = int_n(sqrt(r ** 2 - x ** 2))
-        values.extend(add_symmetric_coors(x0, y0, x, y))
-        values.extend(add_symmetric_coors(x0, y0, y, x))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
+            values.extend(add_symmetric_coors(x0, y0, y, x))
 
     return values
 
 
-def parametric_circle(x0, y0, r):
+def parametric_circle(x0, y0, r, draw=True):
     values = []
 
     step = 1 / r
     for t in np.arange(0, pi / 4 + step, step):
         x = int_n(r * cos(t))
         y = int_n(r * sin(t))
-        values.extend(add_symmetric_coors(x0, y0, x, y))
-        values.extend(add_symmetric_coors(x0, y0, y, x))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
+            values.extend(add_symmetric_coors(x0, y0, y, x))
 
     return values
 
@@ -107,15 +109,16 @@ def add_symmetric_coors(x0, y0, x, y):
     return [x0 + x, y0 + y, x0 - x, y0 - y, x0 + x, y0 - y, x0 - x, y0 + y]
 
 
-def bresenham_circle(x0, y0, r):
+def bresenham_circle(x0, y0, r, draw=True):
     x, y = 0, r
     d = 2 * (1 - r)  # первоначальная ошибка
     yk = r / sqrt(2)
     values = [x, y]
 
     while y >= yk:
-        values.extend(add_symmetric_coors(x0, y0, x, y))
-        values.extend(add_symmetric_coors(x0, y0, y, x))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
+            values.extend(add_symmetric_coors(x0, y0, y, x))
 
         if d < 0:
             d1 = 2 * d + 2 * y - 1
@@ -135,13 +138,14 @@ def bresenham_circle(x0, y0, r):
     return values
 
 
-def midpoint_circle(x0, y0, r):
+def midpoint_circle(x0, y0, r, draw=True):
     x, y = 0, r
     p = 1 - r
     values = []
 
-    values.extend(add_symmetric_coors(x0, y0, x, y))
-    values.extend(add_symmetric_coors(x0, y0, y, x))
+    if draw:
+        values.extend(add_symmetric_coors(x0, y0, x, y))
+        values.extend(add_symmetric_coors(x0, y0, y, x))
 
     while x < y:
         x += 1
@@ -150,8 +154,8 @@ def midpoint_circle(x0, y0, r):
         else:
             y -= 1
             p += 2 * (x - y) + 1
-
-        values.extend(add_symmetric_coors(x0, y0, x, y))
-        values.extend(add_symmetric_coors(x0, y0, y, x))
+        if draw:
+            values.extend(add_symmetric_coors(x0, y0, x, y))
+            values.extend(add_symmetric_coors(x0, y0, y, x))
 
     return values

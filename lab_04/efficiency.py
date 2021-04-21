@@ -27,7 +27,7 @@ def compare_time_circle(canvas, algorithm_funcs, data):
 
     values = []
     step = (r2 - r1) / (n - 1)
-    iters = 100
+    iters = 800
 
     for index, func in enumerate(algorithm_funcs):
         r_cur = r1
@@ -37,7 +37,7 @@ def compare_time_circle(canvas, algorithm_funcs, data):
                 total = 0
                 for _ in range(iters):
                     start = time.time()
-                    func(x, y, r_cur)
+                    func(x, y, r_cur, False)
                     finish = time.time() - start
                     total += finish
 
@@ -87,7 +87,7 @@ def compare_time_ellipse(canvas, algorithm_funcs, data, choice):
 
     values = []
     step = (t2 - t1) / (n - 1)
-    iters = 100
+    iters = 800
 
     for index, func in enumerate(algorithm_funcs):
         t_cur = t1
@@ -98,12 +98,12 @@ def compare_time_ellipse(canvas, algorithm_funcs, data, choice):
                 for _ in range(iters):
                     if choice == 0:
                         start = time.time()
-                        func(x, y, t_cur, t)
+                        func(x, y, t_cur, t, False)
                         finish = time.time() - start
                         total += finish
                     else:
                         start = time.time()
-                        func(x, y, t, t_cur)
+                        func(x, y, t, t_cur, False)
                         finish = time.time() - start
                         total += finish
                 cur_values.append(total / iters)
