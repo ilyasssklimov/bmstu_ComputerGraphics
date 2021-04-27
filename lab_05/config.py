@@ -22,6 +22,9 @@ class Point:
     def __bool__(self):
         return self.exist
 
+    def __str__(self):
+        return f"Point({self.x}, {self.y}, {self.color})"
+
 
 def create_label(root, text, font, row, column, padx, pady, sticky, relief=None, columnspan=1):
     label = tk.Label(root, text=text, font=font, relief=relief)
@@ -29,8 +32,14 @@ def create_label(root, text, font, row, column, padx, pady, sticky, relief=None,
 
 
 def create_button(root, text, font, row, column, padx, pady, columnspan, sticky, command=None):
-    button_create_spectrum = tk.Button(root, text=text, font=font, command=command)
-    button_create_spectrum.grid(row=row, column=column, padx=padx, pady=pady, columnspan=columnspan, sticky=sticky)
+    button = tk.Button(root, text=text, font=font, command=command)
+    button.grid(row=row, column=column, padx=padx, pady=pady, columnspan=columnspan, sticky=sticky)
+
+
+def create_entry(root, font, row, column, padx, pady, sticky, width=None, columnspan=1):
+    entry = tk.Entry(root, font=font, width=width)
+    entry.grid(row=row, column=column, columnspan=columnspan, padx=padx, pady=pady, sticky=sticky)
+    return entry
 
 
 def create_radiobutton(root, variable, value, text, font, row, column, padx, pady, sticky, columnspan=1):
@@ -46,3 +55,12 @@ colors = {
     'Желтый': 'yellow',
     'Белый': 'white'
 }
+
+
+Ctrl = 12
+BLACK_COLOR = (0, 0, 0)
+RED_COLOR = (255, 0, 0)
+BLUE_COLOR = (0, 0, 255)
+GREEN_COLOR = (0, 128, 0)
+YELLOW_COLOR = (255, 255, 0)
+WHITE_COLOR = (255, 255, 255)
