@@ -68,8 +68,8 @@ def canonical_ellipse(x0, y0, a, b):
     s = sqrt(aq + bq)
     limit = int_n(aq / s)
     m = b / a
-    # i = 0
-    for x in range(limit):
+
+    for x in range(limit + 1):
         # i += 1
         y = int_n(sqrt(aq - x ** 2) * m)
         values.extend(add_symmetric_coors(x0, y0, x, y))
