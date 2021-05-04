@@ -4,6 +4,8 @@ import config as cfg
 from config import FONT, FONT_BOLD, WIDTH, PADX, PADY
 import tkinter as tk
 import tkinter.messagebox as mb
+import PIL
+from PIL import ImageTk
 
 
 class MainWindowClass(tk.Frame):
@@ -12,6 +14,9 @@ class MainWindowClass(tk.Frame):
 
         self.canvas = cv.Canvas(self)
         self.add_canvas()
+
+        self.img = None
+        self.add_image()
 
         self.frame_input = tk.Frame(self)
         self.coors = None
@@ -27,6 +32,14 @@ class MainWindowClass(tk.Frame):
 
     def add_canvas(self):
         self.canvas.grid(row=0, column=0, rowspan=3, padx=5, pady=5)
+
+    def add_image(self):
+        image = PIL.Image.open('bg.png')
+        # self.img = ImageTk.PhotoImage(image)
+        # image = canvas.create_image(0, 0, anchor='nw',image=photo)
+        self.img = tk.PhotoImage(width=self.canvas.width, height=self.canvas.height, file='bg.png')
+        self.canvas.create_image((self.canvas.width / 2, self.canvas.height / 2), image=self.img, state='normal')
+        self.img.put('red', to=(100, 200, 100, 300))
 
     def add_input(self):
         text = 'Введите координаты\nдля следующей\nточки через пробел\n(либо сделайте\nэто мышью)'
@@ -48,7 +61,7 @@ class MainWindowClass(tk.Frame):
         cfg.create_button(self.frame_buttons, 'Замкнуть фигуру', FONT, 0, 0, PADX, PADY, 1, 'WE', self.canvas.end_draw)
         cfg.create_button(self.frame_buttons, 'Очистить холст', FONT, 1, 0, PADX, PADY, 1, 'WE', self.canvas.delete_all)
         cfg.create_button(self.frame_buttons, 'Закрасить фигуру', FONT, 2, 0, PADX, PADY, 1, 'WE',
-                          lambda: alg.algorithm_partition(self.canvas))
+                          lambda: alg.algorithm_partition(self.canvas, True))
         self.frame_buttons.grid(row=2, column=1, padx=5, pady=5, sticky=tk.N)
 
     def change_color(self):
@@ -64,6 +77,7 @@ class MainWindowClass(tk.Frame):
                 self.canvas.color = list(cfg.colors.values())[color]
                 point = cfg.Point(float(coors[i]), float(coors[i + 1]), color)
                 self.canvas.draw_line(point)
+                self.coors.insert(0, '')
         except ValueError:
             mb.showerror('Ошибка', 'Каждая координата должна быть числом')
         except IndexError:

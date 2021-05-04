@@ -12,6 +12,20 @@ PADX = 1
 PADY = 1
 
 
+def sign(x):
+    if x < 0:
+        return -1
+    elif x == 0:
+        return 0
+    else:
+        return 1
+
+
+def int_n(num):
+    num = int(num + (0.5 if num > 0 else -0.5))
+    return num
+
+
 class Point:
     def __init__(self, x=0, y=0, color='black', exist=True):
         self.x = x
@@ -57,7 +71,7 @@ colors = {
 }
 
 
-Ctrl = 12
+Ctrl = 4
 BLACK_COLOR = (0, 0, 0)
 RED_COLOR = (255, 0, 0)
 BLUE_COLOR = (0, 0, 255)

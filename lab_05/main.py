@@ -4,7 +4,7 @@ import tkinter as tk
 
 def create_main_frame(root):
     main_window = interface.MainWindowClass(root=root)
-    root.title('Построение окружностей и эллипсов')
+    root.title('Заполнение')
     root.resizable(False, False)
     main_window.grid()
 
