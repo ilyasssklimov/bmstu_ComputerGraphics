@@ -71,7 +71,7 @@ colors = {
 }
 
 
-Ctrl = 4
+Ctrl = [4, 12]
 BLACK_COLOR = (0, 0, 0)
 RED_COLOR = (255, 0, 0)
 BLUE_COLOR = (0, 0, 255)

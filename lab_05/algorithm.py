@@ -2,7 +2,6 @@
 
 import config as cfg
 import time
-from PIL import ImageGrab
 
 
 def bresenham_int(canvas, start, finish):
@@ -48,12 +47,6 @@ def get_color(canvas, x, y):
     return canvas.frame.img.get(x, y)
 
 
-def get_colora(canvas, x, y):
-    x, y = canvas.winfo_rootx() + x, canvas.winfo_rooty() + y
-    image = ImageGrab.grab((x, y, x + 1, y + 1))
-    return image.getpixel((0, 0))
-
-
 def find_x_max(edges):
     m = None
 
@@ -66,11 +59,26 @@ def find_x_max(edges):
     return m
 
 
+def find_partition(edges):
+    min_x = None
+
+    for i in range(len(edges)):
+        if min_x is None or edges[i][0].x < min_x:
+            min_x = edges[i][0].x
+        if min_x is None or edges[i][1].x < min_x:
+            min_x = edges[i][1].x
+    print(min_x, find_x_max(edges))
+    print((find_x_max(edges) - min_x) / 2)
+    return (find_x_max(edges) - min_x) / 2 + min_x
+
+
 def algorithm_partition(canvas, delay=False):
     start = time.time()
     x_max = cfg.int_n(find_x_max(canvas.edges))
+    partition = find_partition(canvas.edges)
 
     for edge in canvas.edges:
+        print(edge[0].x, edge[1].x)
         x1, y1 = edge[0].x, edge[0].y
         x2, y2 = edge[1].x, edge[1].y
 
@@ -79,22 +87,26 @@ def algorithm_partition(canvas, delay=False):
                 x1, x2 = x2, x1
                 y1, y2 = y2, y1
 
-            y_cur, y_end = y1, y2
+            # y_cur, y_end = y1, y2
             dx = (x2 - x1) / abs(y2 - y1)
+            # dy = (y2 - y1) / abs(x2 - x1)
 
-            x_start = x1 + 1
-            while y_cur < y_end:
+            print(f'dx = {dx}')
+            x_start = x1
+
+            for y_cur in range(y1, y2):
                 x_cur = x_start
                 canvas.update()
-                while x_cur <= x_max:
-                    # s = time.time()
-                    canvas.inverse_pixel(cfg.int_n(x_cur), cfg.int_n(y_cur), canvas.color)
-                    # print(f'cur_time = {time.time() - s}')
-                    # canvas.set_pixel(cfg.Point(cfg.int_n(x_cur), y_cur, canvas.color))
-                    x_cur += 1
+                if x_cur <= partition:
+                    while x_cur <= partition:
+                        canvas.inverse_pixel(cfg.int_n(x_cur), cfg.int_n(y_cur), canvas.color)
+                        x_cur += 1
+                else:
+                    while x_cur >= partition:
+                        canvas.inverse_pixel(cfg.int_n(x_cur), cfg.int_n(y_cur), canvas.color)
+                        x_cur -= 1
 
                 x_start += dx
-                y_cur += 1
 
     finish = time.time() - start
     print(f'Время = {finish}')

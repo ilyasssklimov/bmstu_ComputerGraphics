@@ -34,12 +34,11 @@ class MainWindowClass(tk.Frame):
         self.canvas.grid(row=0, column=0, rowspan=3, padx=5, pady=5)
 
     def add_image(self):
-        image = PIL.Image.open('bg.png')
+        # image = PIL.Image.open('img/bg.png')
         # self.img = ImageTk.PhotoImage(image)
         # image = canvas.create_image(0, 0, anchor='nw',image=photo)
-        self.img = tk.PhotoImage(width=self.canvas.width, height=self.canvas.height, file='bg.png')
+        self.img = tk.PhotoImage(width=self.canvas.width, height=self.canvas.height, file='img/bg.png')
         self.canvas.create_image((self.canvas.width / 2, self.canvas.height / 2), image=self.img, state='normal')
-        self.img.put('red', to=(100, 200, 100, 300))
 
     def add_input(self):
         text = 'Введите координаты\nдля следующей\nточки через пробел\n(либо сделайте\nэто мышью)'

@@ -35,7 +35,7 @@ class Canvas(tk.Canvas):
             self.old = cfg.Point(event_x, event_y, self.color)
         else:
             try:
-                if event.state == cfg.Ctrl:
+                if event.state in cfg.Ctrl:
                     if event_x == self.old.x:
                         m = 0
                     else:
@@ -57,7 +57,8 @@ class Canvas(tk.Canvas):
     def end_draw(self):
         if self.first and self.old:
             self.edges.append((self.old, self.first))
-            self.create_line(self.old.x, self.old.y, self.first.x, self.first.y, fill=self.color)
+            alg.bresenham_int(self, self.old, self.first)
+            # self.create_line(self.old.x, self.old.y, self.first.x, self.first.y, fill=self.color)
             self.restart()
 
     def delete_all(self):
