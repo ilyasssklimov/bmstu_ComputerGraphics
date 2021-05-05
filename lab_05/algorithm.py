@@ -108,5 +108,7 @@ def algorithm_partition(canvas, delay=False):
 
                 x_start += dx
 
+        bresenham_int(canvas, edge[0], edge[1])
+
     finish = time.time() - start
     print(f'Время = {finish}')
