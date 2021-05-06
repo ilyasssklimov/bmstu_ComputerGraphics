@@ -28,15 +28,14 @@ class MainWindowClass(tk.Frame):
         self.add_color()
 
         self.frame_buttons = tk.Frame(self)
+        self.mode = tk.IntVar()
+        self.mode.set(0)
         self.add_buttons()
 
     def add_canvas(self):
         self.canvas.grid(row=0, column=0, rowspan=3, padx=5, pady=5)
 
     def add_image(self):
-        # image = PIL.Image.open('img/bg.png')
-        # self.img = ImageTk.PhotoImage(image)
-        # image = canvas.create_image(0, 0, anchor='nw',image=photo)
         self.img = tk.PhotoImage(width=self.canvas.width, height=self.canvas.height, file='img/bg.png')
         self.canvas.create_image((self.canvas.width / 2, self.canvas.height / 2), image=self.img, state='normal')
 
@@ -60,7 +59,11 @@ class MainWindowClass(tk.Frame):
         cfg.create_button(self.frame_buttons, 'Замкнуть фигуру', FONT, 0, 0, PADX, PADY, 1, 'WE', self.canvas.end_draw)
         cfg.create_button(self.frame_buttons, 'Очистить холст', FONT, 1, 0, PADX, PADY, 1, 'WE', self.canvas.delete_all)
         cfg.create_button(self.frame_buttons, 'Закрасить фигуру', FONT, 2, 0, PADX, PADY, 1, 'WE',
-                          lambda: alg.algorithm_partition(self.canvas, True))
+                          lambda: alg.algorithm_partition(self.canvas, False if self.mode.get() == 0 else True))
+
+        cfg.create_radiobutton(self.frame_buttons, self.mode, 0, 'Без задержки', FONT, 3, 0, PADX, PADY, 'WN')
+        cfg.create_radiobutton(self.frame_buttons, self.mode, 1, 'C задержкой', FONT, 4, 0, PADX, PADY, 'WN')
+
         self.frame_buttons.grid(row=2, column=1, padx=5, pady=5, sticky=tk.N)
 
     def change_color(self):
