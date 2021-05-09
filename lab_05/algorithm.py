@@ -6,14 +6,18 @@ import time
 from tkinter import messagebox as mb
 
 
-def abresenham_int(canvas, start, finish):
+def bresenham_int(canvas, start, finish):
     x1, y1, x2, y2 = start.x, start.y, finish.x, finish.y
     if x1 == x2 and y1 == y2:
         return [(x1, y1)]
+    canvas.create_line(start.x, start.y, finish.x, finish.y, fill=start.color)
 
-    values = []
-    abs_dx = int(abs(x2 - x1))
-    abs_dy = int(abs(y2 - y1))
+
+def abresenham_int(canvas, start, finish):
+    x1, y1, x2, y2 = start.x, start.y, finish.x, finish.y
+
+    abs_dx = abs(x2 - x1)
+    abs_dy = abs(y2 - y1)
     if abs_dx > abs_dy:
         L = abs_dx
     else:
@@ -24,15 +28,14 @@ def abresenham_int(canvas, start, finish):
 
     color = start.color
     for _ in range(L):
-        canvas.set_pixel(cfg.Point(int(x), int(y), color))
-        # values.append((int_n(x), int_n(y)))
+        canvas.set_pixel(cfg.Point(round(x), round(y), color))
         x += dx
         y += dy
 
     # return values
 
 
-def bresenham_int(canvas, start, finish):
+def abresenham_int(canvas, start, finish):
     x1, y1, x2, y2 = start.x, start.y, finish.x, finish.y
     if x1 == x2 and y1 == y2:
         return [(x1, y1)]
@@ -146,6 +149,30 @@ def algorithm_partition(canvas, delay=False):
 
     finish = time.time() - start
     print(f'Время = {finish}')
+
+
+def fill_pixels(canvas, begin, end, y):
+    for x in range(begin, end + 1):
+        canvas.inverse_pixel(x, y, canvas.color)
+
+
+def aalgorithm_partition(canvas, delay=False):
+    max_x = find_x_max(canvas.edges)
+    for edge in canvas.edges:
+        x1, y1 = edge[0].x, edge[0].y
+        x2, y2 = edge[1].x, edge[1].y
+
+        if y1 > y2:
+            x1, x2 = x2, x1
+            y1, y2 = y2, y1
+        dx = (x2 - x1) / (y2 - y1)
+        x = x1
+        for y in range(y1, y2):
+            fill_pixels(canvas, cfg.int_n(x), max_x, y)
+            x += dx
+            canvas.update()
+            if delay:
+                time.sleep(0.2)
 
 
 '''
