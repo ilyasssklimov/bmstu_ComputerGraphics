@@ -64,6 +64,8 @@ class MainWindowClass(tk.Frame):
         cfg.create_radiobutton(self.frame_buttons, self.mode, 0, 'Без задержки', FONT, 3, 0, PADX, PADY, 'WN')
         cfg.create_radiobutton(self.frame_buttons, self.mode, 1, 'C задержкой', FONT, 4, 0, PADX, PADY, 'WN')
 
+        cfg.create_button(self.frame_buttons, 'Измерить время', FONT, 5, 0, PADX, PADY, 1, 'WE', self.count_time)
+
         self.frame_buttons.grid(row=2, column=1, padx=5, pady=5, sticky=tk.N)
 
     def change_color(self):
@@ -84,3 +86,7 @@ class MainWindowClass(tk.Frame):
             mb.showerror('Ошибка', 'Каждая координата должна быть числом')
         except IndexError:
             mb.showerror('Ошибка', 'Количество координат должно быть больше нуля и четным числом')
+
+    def count_time(self):
+        time = alg.algorithm_partition(self.canvas)
+        mb.showinfo('Время', f'Время для заполнения заданной области составило {time:.6f} секунды')

@@ -49,16 +49,17 @@ class Canvas(tk.Canvas):
             except AttributeError:
                 new_point = cfg.Point(event_x, event_y, self.color)
 
-            # self.create_line(self.old.x, self.old.y, new_point.x, new_point.y, fill=self.color)
-            alg.bresenham_int(self, self.old, new_point)
+            self.create_line(self.old.x, self.old.y, new_point.x, new_point.y, fill=self.color)
+            # alg.bresenham_int(self, self.old, new_point)
             self.edges.append((self.old, new_point))
             self.old = new_point
 
     def end_draw(self):
         if self.first and self.old:
             self.edges.append((self.old, self.first))
-            alg.bresenham_int(self, self.old, self.first)
-            # self.create_line(self.old.x, self.old.y, self.first.x, self.first.y, fill=self.color)
+            # alg.bresenham_int(self, self.old, self.first)
+            self.create_line(self.old.x, self.old.y, self.first.x, self.first.y, fill=self.color)
+            # self.frame.img.put('black', (2, 2), (100, 100))
             self.restart()
 
     def delete_all(self):
