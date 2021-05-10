@@ -81,7 +81,7 @@ class MainWindowClass(tk.Frame):
                 self.canvas.color = list(cfg.colors.values())[color]
                 point = cfg.Point(float(coors[i]), float(coors[i + 1]), color)
                 self.canvas.draw_line(point)
-                self.coors.insert(0, '')
+                self.coors.delete(0, 'end')
         except ValueError:
             mb.showerror('Ошибка', 'Каждая координата должна быть числом')
         except IndexError:

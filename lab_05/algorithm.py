@@ -64,13 +64,11 @@ def find_partition(edges):
 def algorithm_partition(canvas, delay=False):
     if not canvas.edges:
         return mb.showerror('Ошибка!', 'Невозможно выполнить действие, так как отсутствует область для закрашивания')
-    # canvas.create_image((canvas.width / 2, canvas.height / 2), image=canvas.frame.img, state='normal')
+
     start = time.time()
-    # x_max = cfg.int_n(find_x_max(canvas.edges))
     partition = find_partition(canvas.edges)
 
     for edge in canvas.edges:
-        # print(edge[0].x, edge[1].x)
         x1, y1 = edge[0].x, edge[0].y
         x2, y2 = edge[1].x, edge[1].y
 
@@ -80,64 +78,11 @@ def algorithm_partition(canvas, delay=False):
                 y1, y2 = y2, y1
 
             dx = (x2 - x1) / abs(y2 - y1)
-            # print(f'first = {x1}, second = {x2}, dx = {dx}')
-            # bresenham_int(canvas, cfg.Point(edge[0].x, edge[0].y, 'white'), edge[1])
             x_start = x1
-            # print(f'length = {math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)}')
+
             for y_cur in range(y1, y2):
                 x_cur = cfg.int_n(x_start)
-                # canvas.set_pixel(cfg.Point(x_cur, y_cur, canvas.color))
-                # x_start += dx
-                # continue
-                if x_cur < partition:
-                    # x_cur += 1
-                    while x_cur < partition:
-                        canvas.inverse_pixel(x_cur, y_cur, canvas.color)
-                        x_cur += 1
-                else:
-                    # x_cur -= 1
-                    while x_cur >= partition:
-                        canvas.inverse_pixel(x_cur, y_cur, canvas.color)
-                        x_cur -= 1
 
-                x_start += dx
-
-                if delay:
-                    time.sleep(0.2)
-                canvas.update()
-
-        # bresenham_int(canvas, edge[0], edge[1])
-
-    finish = time.time() - start
-    return finish
-def algorithm_partition(canvas, delay=False):
-    if not canvas.edges:
-        return mb.showerror('Ошибка!', 'Невозможно выполнить действие, так как отсутствует область для закрашивания')
-    # canvas.create_image((canvas.width / 2, canvas.height / 2), image=canvas.frame.img, state='normal')
-    start = time.time()
-    # x_max = cfg.int_n(find_x_max(canvas.edges))
-    partition = find_partition(canvas.edges)
-
-    for edge in canvas.edges:
-        # print(edge[0].x, edge[1].x)
-        x1, y1 = edge[0].x, edge[0].y
-        x2, y2 = edge[1].x, edge[1].y
-
-        if y1 != y2:
-            if y1 > y2:
-                x1, x2 = x2, x1
-                y1, y2 = y2, y1
-
-            dx = (x2 - x1) / abs(y2 - y1)
-            # print(f'first = {x1}, second = {x2}, dx = {dx}')
-            # bresenham_int(canvas, cfg.Point(edge[0].x, edge[0].y, 'white'), edge[1])
-            x_start = x1
-            # print(f'length = {math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)}')
-            for y_cur in range(y1, y2):
-                x_cur = cfg.int_n(x_start)
-                # canvas.set_pixel(cfg.Point(x_cur, y_cur, canvas.color))
-                # x_start += dx
-                # continue
                 if x_cur < partition:
                     # x_cur += 1
                     while x_cur < partition:
@@ -154,8 +99,6 @@ def algorithm_partition(canvas, delay=False):
                 if delay:
                     time.sleep(0.2)
                     canvas.update()
-
-        # bresenham_int(canvas, edge[0], edge[1])
 
     finish = time.time() - start
     return finish
