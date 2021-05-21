@@ -6,7 +6,6 @@ CANVAS_HEIGHT = 750
 
 FONT = 'Times 12'
 FONT_BOLD = FONT + ' bold'
-WIDTH = 5
 
 PADX = 1
 PADY = 1

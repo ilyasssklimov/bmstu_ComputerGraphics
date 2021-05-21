@@ -1,11 +1,9 @@
 import algorithm as alg
 import canvas as cv
 import config as cfg
-from config import FONT, FONT_BOLD, WIDTH, PADX, PADY
+from config import FONT, FONT_BOLD, PADX, PADY
 import tkinter as tk
 import tkinter.messagebox as mb
-import PIL
-from PIL import ImageTk
 
 
 class MainWindowClass(tk.Frame):
@@ -40,7 +38,9 @@ class MainWindowClass(tk.Frame):
         self.canvas.create_image((self.canvas.width / 2, self.canvas.height / 2), image=self.img, state='normal')
 
     def add_input(self):
-        text = 'Введите координаты\nдля следующей\nточки через пробел\n(либо сделайте\nэто мышью)'
+        text = 'Введите координаты\nдля следующей\nточки через пробел\n(либо сделайте\nэто мышью)\n' \
+               '(Зажатый Ctrl - \nпрямые отрезки)'
+
         cfg.create_label(self.frame_input, text, FONT_BOLD, 0, 0, PADX, PADY, tk.N, 'groove')
         entry_coors = cfg.create_entry(self.frame_input, FONT, 1, 0, PADX, PADY, tk.N)
         cfg.create_button(self.frame_input, 'Добавить', FONT, 2, 0, PADX, PADY, 1, 'WE', self.draw_point)

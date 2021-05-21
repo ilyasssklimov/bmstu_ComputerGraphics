@@ -1,42 +1,8 @@
 # Алгоритм с перегородкой
 
 import config as cfg
-import math
 import time
 from tkinter import messagebox as mb
-
-
-def bresenham_int(canvas, start, finish):
-    x1, y1, x2, y2 = start.x, start.y, finish.x, finish.y
-
-    dx, dy = x2 - x1, y2 - y1
-    sx, sy = cfg.sign(dx), cfg.sign(dy)
-    dx, dy = abs(dx), abs(dy)
-
-    if dx > dy:
-        exchange = 0
-    else:
-        dx, dy = dy, dx
-        exchange = 1
-
-    e = dy + dy - dx
-    x, y = cfg.int_n(x1), cfg.int_n(y1)
-    color = start.color
-
-    for _ in range(int(dx)):
-        canvas.set_pixel(cfg.Point(x, y, color))
-        if e >= 0:
-            if exchange == 1:
-                x += sx
-            else:
-                y += sy
-            e -= (dx + dx)
-        if e < 0:
-            if exchange == 1:
-                y += sy
-            else:
-                x += sx
-        e += (dy + dy)
 
 
 def get_color(canvas, x, y):
@@ -84,12 +50,10 @@ def algorithm_partition(canvas, delay=False):
                 x_cur = cfg.int_n(x_start)
 
                 if x_cur < partition:
-                    # x_cur += 1
                     while x_cur < partition:
                         canvas.inverse_pixel(x_cur, y_cur, canvas.color)
                         x_cur += 1
                 else:
-                    # x_cur -= 1
                     while x_cur >= partition:
                         canvas.inverse_pixel(x_cur, y_cur, canvas.color)
                         x_cur -= 1
@@ -97,8 +61,8 @@ def algorithm_partition(canvas, delay=False):
                 x_start += dx
 
                 if delay:
-                    time.sleep(0.2)
+                    time.sleep(0.05)
                     canvas.update()
-
+    canvas.update()
     finish = time.time() - start
     return finish
