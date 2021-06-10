@@ -1,4 +1,4 @@
-import lab_10.interface as nrf
+import interface as nrf
 import tkinter as tk
 
 

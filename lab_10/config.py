@@ -1,7 +1,7 @@
 import tkinter as tk
 
 
-FONT = 'Times 12'
+FONT = 'Times 14'
 FONT_BOLD = FONT + ' bold'
 
 PADX = 1

@@ -1,4 +1,4 @@
-import lab_10.algorithm as alg
+import algorithm as alg
 import math
 import numpy as np
 import time
@@ -77,9 +77,45 @@ class Canvas(tk.Canvas):
                 res_point[i] += point[j] * self.transform_matrix[j][i]
 
         for i in range(3):
-            res_point[i] *= self.frame.scale
+            res_point[i] *= float(self.frame.scale.get())
 
         res_point[0] += 900 / 2
         res_point[1] += 750 / 2
 
         return res_point[:3]
+
+    def rotate_x(self):
+        value = float(self.frame.ox.get()) / 180 * math.pi
+        rotate_matrix = [
+            [1, 0, 0, 0],
+            [0, math.cos(value), math.sin(value), 0],
+            [0, -math.sin(value), math.cos(value), 0],
+            [0, 0, 0, 1]
+        ]
+
+        self.transform_matrix = alg.rotate_matrix(self.transform_matrix, rotate_matrix)
+        self.frame.draw_func()
+
+    def rotate_y(self):
+        value = float(self.frame.oy.get()) / 180 * math.pi
+        rotate_matrix = [
+            [math.cos(value), 0, -math.sin(value), 0],
+            [0, 1, 0, 0],
+            [math.sin(value), 0, math.cos(value), 0],
+            [0, 0, 0, 1]
+        ]
+
+        self.transform_matrix = alg.rotate_matrix(self.transform_matrix, rotate_matrix)
+        self.frame.draw_func()
+
+    def rotate_z(self):
+        value = float(self.frame.oz.get()) / 180 * math.pi
+        rotate_matrix = [
+            [math.cos(value), math.sin(value), 0, 0],
+            [-math.sin(value), math.cos(value), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
+        ]
+
+        self.transform_matrix = alg.rotate_matrix(self.transform_matrix, rotate_matrix)
+        self.frame.draw_func()
