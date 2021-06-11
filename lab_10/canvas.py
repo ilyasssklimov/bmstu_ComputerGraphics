@@ -1,8 +1,9 @@
-import algorithm as alg
+import lab_10.algorithm as alg
 import math
 import numpy as np
 import time
 import tkinter as tk
+import tkinter.messagebox as mb
 
 
 class Canvas(tk.Canvas):
@@ -16,6 +17,7 @@ class Canvas(tk.Canvas):
         super().__init__(self.frame, width=self.width, height=self.height, bg='white', highlightbackground='black')
 
     def delete_all(self):
+        self.transform_matrix = [[int(i == j) for i in range(4)] for j in range(4)]
         self.delete('all')
 
     def set_pixel(self, x, y):
@@ -76,8 +78,11 @@ class Canvas(tk.Canvas):
             for j in range(4):
                 res_point[i] += point[j] * self.transform_matrix[j][i]
 
-        for i in range(3):
-            res_point[i] *= float(self.frame.scale.get())
+        try:
+            for i in range(3):
+                res_point[i] *= float(self.frame.scale.get())
+        except ValueError:
+            return mb.showerror('Ошибка', 'Проверьте значени коэффициента')
 
         res_point[0] += 900 / 2
         res_point[1] += 750 / 2
@@ -85,7 +90,11 @@ class Canvas(tk.Canvas):
         return res_point[:3]
 
     def rotate_x(self):
-        value = float(self.frame.ox.get()) / 180 * math.pi
+        try:
+            value = float(self.frame.ox.get()) / 180 * math.pi
+        except ValueError:
+            return mb.showerror('Ошибка', 'Проверьте значени коэффициента')
+
         rotate_matrix = [
             [1, 0, 0, 0],
             [0, math.cos(value), math.sin(value), 0],
@@ -97,7 +106,11 @@ class Canvas(tk.Canvas):
         self.frame.draw_func()
 
     def rotate_y(self):
-        value = float(self.frame.oy.get()) / 180 * math.pi
+        try:
+            value = float(self.frame.oy.get()) / 180 * math.pi
+        except ValueError:
+            return mb.showerror('Ошибка', 'Проверьте значени коэффициента')
+
         rotate_matrix = [
             [math.cos(value), 0, -math.sin(value), 0],
             [0, 1, 0, 0],
@@ -109,7 +122,11 @@ class Canvas(tk.Canvas):
         self.frame.draw_func()
 
     def rotate_z(self):
-        value = float(self.frame.oz.get()) / 180 * math.pi
+        try:
+            value = float(self.frame.oz.get()) / 180 * math.pi
+        except ValueError:
+            return mb.showerror('Ошибка', 'Проверьте значени коэффициента')
+
         rotate_matrix = [
             [math.cos(value), math.sin(value), 0, 0],
             [-math.sin(value), math.cos(value), 0, 0],
